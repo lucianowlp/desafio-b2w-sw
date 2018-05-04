@@ -1,9 +1,8 @@
 import * as http from 'http';
 import server from './config/server';
-
-const port = 5005;
+import { environment } from './common/environment';
 
 const serverr = http.createServer(server);
 
-serverr.listen(port);
-serverr.on('listening', () => console.log(`API is running on port ${port}.`));
+serverr.listen(environment.server.port);
+serverr.on('listening', () => console.log(`API is running on port ${environment.server.port}.`));
