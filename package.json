@@ -2,9 +2,10 @@
   "name": "desafio-b2w-sw",
   "version": "1.0.0",
   "description": "",
-  "main": "loader.js",
+  "main": "dist/loader.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon --delay 5",
+    "gulp": "node_modules/.bin/gulp"
   },
   "repository": {
     "type": "git",
@@ -17,12 +18,17 @@
   },
   "homepage": "https://github.com/lucianowlp/desafio-b2w-sw#readme",
   "dependencies": {
+    "@types/node": "^10.0.3",
     "express": "^4.16.3",
     "mongoose": "^5.0.17",
     "node-restful": "^0.2.6",
     "pm2": "^2.10.3"
   },
   "devDependencies": {
-    "nodemon": "^1.17.3"
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.4.0",
+    "gulp-typescript": "^4.0.2",
+    "nodemon": "^1.17.3",
+    "typescript": "^2.8.3"
   }
 }
