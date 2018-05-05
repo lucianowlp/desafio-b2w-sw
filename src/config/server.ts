@@ -8,10 +8,16 @@ class Server {
 
     constructor() {
         this.express = express();
-        this.initializeDb();
+        this.initializeDb().then(() =>
+            console.log('conectado com sucesso')
+        ).catch(err => {
+            console.log('Erro ao conectar com o mongodb')
+            console.error(err)
+            process.exit(1);
+        });
     }
 
-    initializeDb() {
+    initializeDb(): mongoose.MongooseThenable {
         return mongoose.connect(environment.db.url);
     }
 }
