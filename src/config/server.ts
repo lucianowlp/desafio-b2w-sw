@@ -1,5 +1,7 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
+import * as cors from 'cors';
+import * as allowCors from './cors';
 
 import { environment } from '../common/environment';
 
@@ -8,13 +10,21 @@ class Server {
 
     constructor() {
         this.express = express();
+        this.init();
+    }
+
+    private init(): void {
         this.initializeDb().then(() =>
-            console.log('conectado com sucesso')
+            this.middleware()
         ).catch(err => {
             console.log('Erro ao conectar com o mongodb')
             console.error(err)
             process.exit(1);
         });
+    }
+
+    private middleware(): void {
+        this.express.use(cors(allowCors));
     }
 
     initializeDb(): mongoose.MongooseThenable {
