@@ -1,8 +1,8 @@
 import * as http from 'http';
-import server from './config/server';
+import serverExpress from './config/server';
 import { environment } from './common/environment';
 
-const serverr = http.createServer(server);
+const server = http.createServer(serverExpress);
 
-serverr.listen(environment.server.port);
-serverr.on('listening', () => console.log(`API is running on port ${environment.server.port}.`));
+server.listen(environment.server.port);
+server.on('listening', () => console.log(`API is running on port ${environment.server.port}.`));

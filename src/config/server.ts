@@ -8,10 +8,10 @@ class Server {
 
     constructor() {
         this.express = express();
-        this.initializeDB();
+        this.initializeDb();
     }
 
-    initializeDB() {
+    initializeDb() {
         return mongoose.connect(environment.db.url);
     }
 }
