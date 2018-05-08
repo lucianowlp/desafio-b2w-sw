@@ -2,14 +2,16 @@ import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as cors from 'cors';
 import * as allowCors from './cors';
-
+import planetRouter from '../services/planetService';
+import * as bodyParser from 'body-parser';
 import { environment } from '../common/environment';
 
 class Server {
-    public express: express.Application;
+    public app: express.Application;
+    public router: express.Router;
 
     constructor() {
-        this.express = express();
+        this.app = express();
         this.init();
     }
 
@@ -24,12 +26,22 @@ class Server {
     }
 
     private middleware(): void {
-        this.express.use(cors(allowCors));
+        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.app.use(bodyParser.json());
+        this.app.use(cors(allowCors));
+        this.routes();
     }
 
     initializeDb(): mongoose.MongooseThenable {
         return mongoose.connect(environment.db.url);
     }
+
+    private routes(): void {
+        const router: express.Router = express.Router();
+
+        this.app.use('/', router);
+        this.app.use('/api/v1/planets/', planetRouter);
+    }
 }
 
-export default new Server().express;
+export default new Server().app;
