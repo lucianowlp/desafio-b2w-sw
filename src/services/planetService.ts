@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import _ from 'lodash';
-import Planet from '../models/planetSchema';
+import Planet from '../schemas/planetSchema';
 
 export class PlanetRouter {
 
@@ -32,7 +32,7 @@ export class PlanetRouter {
         Planet.create({
             name: req.body.name,
             climate: req.body.climate,
-            ground: req.body.ground
+            terrain: req.body.terrain
         }, (err, planet) => {
             if (err) {
                 return res.status(500).json({ errors: parseErrors(err) });
