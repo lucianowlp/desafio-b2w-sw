@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import Planet from '../schemas/planetSchema';
+import searchMessage from '../common/customMessage';
 
 export class PlanetRouter {
 
@@ -71,16 +72,19 @@ function parseErrors(err) {
             var eObj = err.errors[field];
             errors.push(eObj.message);
         });
-    } else if (err.message) {
-        errors.push(err.message)
+    } else {
+        customizeError(errors, err);
     }
 
     return errors;
 }
 
 function customizeError(errors, err) {
-    
-    if (err.message) {
+    if (err.code) {
+        if (searchMessage[err.code]) {
+            errors.push(searchMessage[err.code])
+        }
+    } else if (err.message) {
         errors.push(err.message)
     }
 }

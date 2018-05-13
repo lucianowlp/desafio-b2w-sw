@@ -31,11 +31,7 @@ const planetSchema = new mongoose.Schema({
 
 planetSchema.pre('save', function (next) {
     const planet: IPlanet = this;
-    if (this.isNew) {
-        planet.createdAt = new Date;
-    } else {
-        planet.modifiedAt = new Date;
-    }
+    planet.createdAt = new Date;
 
     next();
 });
