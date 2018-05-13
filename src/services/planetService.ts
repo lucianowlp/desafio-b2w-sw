@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import _ from 'lodash';
 import Planet from '../schemas/planetSchema';
 
 export class PlanetRouter {
@@ -21,13 +20,6 @@ export class PlanetRouter {
             });
     }
 
-    public parseErrors(nodeRestfulErrors) {
-        const errors = []
-        _.forIn(nodeRestfulErrors, error => errors.push(error))
-        console.log(errors);
-        return errors
-    }
-
     public create(req, res) {
         Planet.create({
             name: req.body.name,
@@ -41,21 +33,56 @@ export class PlanetRouter {
         });
     }
 
+    public put(req, res) {
+        Planet.findOneAndUpdate({ name: req.body.name }, {
+            climate: req.body.climate,
+            terrain: req.body.terrain,
+            modifiedAt: new Date()
+        }, { new: true }, (err, planet) => {
+            if (err) {
+                return res.status(500).json({ errors: parseErrors(err) });
+            }
+            res.status(200).send(planet);
+        });
+    }
+
+    public delete(req, res) {
+        Planet.findOneAndRemove({ name: req.body.name },
+            (err) => {
+                if (err) {
+                    return res.status(500).json({ errors: parseErrors(err) });
+                }
+                res.status(200).send('Registro excluído com sucesso.');
+            })
+    }
+
     public routes() {
         this.router.get('/', this.all);
         this.router.post('/', this.create);
+        this.router.put('/', this.put);
+        this.router.delete('/', this.delete);
     }
 }
 
 function parseErrors(err) {
     const errors = [];
+    if (err.errors) {
+        Object.keys(err.errors).forEach(function (field) {
+            var eObj = err.errors[field];
+            errors.push(eObj.message);
+        });
+    } else if (err.message) {
+        errors.push(err.message)
+    }
 
-    Object.keys(err.errors).forEach(function (field) {
-        var eObj = err.errors[field];
-        errors.push(eObj.message);
-    });
+    return errors;
+}
 
-    return errors
+function customizeError(errors, err) {
+    
+    if (err.message) {
+        errors.push(err.message)
+    }
 }
 
 export default new PlanetRouter().router;

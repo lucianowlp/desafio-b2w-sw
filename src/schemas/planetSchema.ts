@@ -5,7 +5,8 @@ const planetSchema = new mongoose.Schema({
     name: {
         type: String,
         default: '',
-        required: [true, "O campo nome é obrigatório."]
+        required: [true, "O campo nome é obrigatório."],
+        unique: true
     },
     climate: {
         type: String,
@@ -20,6 +21,7 @@ const planetSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         required: false,
+        update: false
     },
     modifiedAt: {
         type: Date,
