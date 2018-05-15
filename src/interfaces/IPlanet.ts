@@ -3,6 +3,5 @@ export interface IPlanet {
     climate: String,
     terrain: String,
     createdAt?: Date,
-    modifiedAt?: Date,
-    films?: Array<String>
+    modifiedAt?: Date
 };

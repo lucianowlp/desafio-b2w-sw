@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --delay 5",
     "gulp": "node_modules/.bin/gulp",
-    "debug": "node --nolazy --inspect dist/loader.js",
+    "debug": "node --nolazy --inspect dist/index.js",
     "test": "mocha dist/test"
   },
   "repository": {
@@ -21,7 +21,9 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",
-    "mongoose": "^5.1.1"
+    "mongoose": "^5.1.1",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "@types/chai": "^4.1.3",

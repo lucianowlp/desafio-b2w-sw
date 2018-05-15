@@ -1,6 +1,9 @@
 import { Request, Response, Router } from 'express';
 import Planet from '../schemas/planetSchema';
 import searchMessage from '../common/customMessage';
+import { IPlanet } from '../interfaces/IPlanet';
+import { environment } from '../common/environment';
+import * as requestPromise from "request-promise";
 
 export class PlanetRouter {
 
@@ -11,10 +14,49 @@ export class PlanetRouter {
         this.routes();
     }
 
-    public all(req: Request, res: Response): void {
+    createUrlSearchPlanet(name) {
+        return {
+            uri: `${environment.urlSWApi}planets/?search=${name}`,
+            headers: {
+                'User-Agent': 'Request-Promise'
+            },
+            json: true
+        };
+    }
+
+    all = (req: Request, res: Response): void => {
         Planet.find()
             .then((data) => {
-                res.status(200).json({ data });
+                let promises = [];
+
+                for (let index = 0; index < data.length; index++) {
+                    var options = this.createUrlSearchPlanet(data[index].name);
+                    promises.push(requestPromise.get(options)
+                        .then(function (planetSW) {
+                            return {
+                                name: data[index].name,
+                                climate: data[index].climate,
+                                terrain: data[index].terrain,
+                                createdAt: data[index].createdAt,
+                                modifiedAt: data[index].modifiedAt,
+                                films: planetSW.results[0].films.length
+                            };
+                        })
+                        .catch(function (err) {
+                            return parseErrors(err);
+                        }));
+                }
+
+                return Promise.all(promises)
+                    .then((results) => {
+                        return results;
+                    })
+                    .catch((err) => {
+                        return parseErrors(err);
+                    });
+            })
+            .then((planets: any) => {
+                res.status(200).json({ planets });
             })
             .catch((error) => {
                 res.json({ error });
